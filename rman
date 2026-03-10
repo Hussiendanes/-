@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كفو بالقوية 💖</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:Tahome, Arial;
+background:linear-gradient(270deg,#ff9ecf,#ffc1e3,#ffb6d9,#ffd6ec);
+background-size:800% 800%;
+animation:bgMove 15s ease infinite;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.card{
+position:relative;
+padding:50px 70px;
+border-radius:30px;
+background:rgba(255,255,255,0.65);
+backdrop-filter:blur(12px);
+box-shadow:0 20px 60px rgba(0,0,0,0.25);
+text-align:center;
+transform-style:preserve-3d;
+animation:pop 1s ease;
+}
+
+h1{
+font-size:50px;
+color:#ff2f86;
+margin-bottom:10px;
+}
+
+p{
+font-size:26px;
+color:#444;
+}
+
+@keyframes pop{
+0%{transform:scale(0) rotate(-10deg);opacity:0}
+100%{transform:scale(1) rotate(0deg);opacity:1}
+}
+
+.heart{
+position:absolute;
+pointer-events:none;
+animation:float linear forwards;
+}
+
+@keyframes float{
+0%{transform:translateY(110vh) scale(0.5);opacity:0}
+10%{opacity:1}
+100%{transform:translateY(-10vh) scale(1.2);opacity:0}
+}
+
+.spark{
+position:absolute;
+font-size:18px;
+animation:spark 2s linear infinite;
+}
+
+@keyframes spark{
+0%{transform:scale(0);opacity:0}
+50%{transform:scale(1);opacity:1}
+100%{transform:scale(0);opacity:0}
+}
+
+canvas{
+position:absolute;
+top:0;
+left:0;
+z-index:-1;
+}
+
+.confetti{
+position:absolute;
+width:8px;
+height:8px;
+background:red;
+animation:confettiFall linear forwards;
+}
+
+@keyframes confettiFall{
+0%{transform:translateY(-10vh) rotate(0deg)}
+100%{transform:translateY(110vh) rotate(720deg)}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="card" id="card">
+<h1>كفوو بالقوية 💗</h1>
+<p>كملتي 20 ورقة ✨</p>
+<p>فخر والله 😎</p>
+</div>
+
+<audio autoplay loop>
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9bce13.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* قلوب تطلع */
+function hearts(){
+let heart=document.createElement("div")
+heart.className="heart"
+heart.innerHTML="💖"
+heart.style.left=Math.random()*100+"vw"
+heart.style.fontSize=(20+Math.random()*40)+"px"
+heart.style.animationDuration=(4+Math.random()*4)+"s"
+document.body.appendChild(heart)
+setTimeout(()=>heart.remove(),8000)
+}
+setInterval(hearts,200)
+
+
+/* نجوم */
+function spark(){
+let s=document.createElement("div")
+s.className="spark"
+s.innerHTML="✨"
+s.style.left=Math.random()*100+"vw"
+s.style.top=Math.random()*100+"vh"
+document.body.appendChild(s)
+setTimeout(()=>s.remove(),2000)
+}
+setInterval(spark,300)
+
+
+/* كونفتي */
+function confetti(){
+for(let i=0;i<10;i++){
+let c=document.createElement("div")
+c.className="confetti"
+c.style.left=Math.random()*100+"vw"
+c.style.background=["#ff4da6","#ff85c2","#ffd6ec","#fff"][Math.floor(Math.random()*4)]
+c.style.animationDuration=(3+Math.random()*3)+"s"
+document.body.appendChild(c)
+setTimeout(()=>c.remove(),6000)
+}
+}
+setInterval(confetti,1500)
+
+
+/* تأثير 3D بالماوس */
+let card=document.getElementById("card")
+
+document.addEventListener("mousemove",e=>{
+
+let x=(window.innerWidth/2-e.clientX)/25
+let y=(window.innerHeight/2-e.clientY)/25
+
+card.style.transform="rotateY("+x+"deg) rotateX("+y+"deg)"
+
+})
+
+
+/* نظام جسيمات بالخلفية */
+let canvas=document.getElementById("particles")
+let ctx=canvas.getContext("2d")
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+let particles=[]
+
+for(let i=0;i<120;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*3+1,
+dx:(Math.random()-0.5)*1,
+dy:(Math.random()-0.5)*1
+})
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+particles.forEach(p=>{
+
+p.x+=p.dx
+p.y+=p.dy
+
+if(p.x<0||p.x>canvas.width)p.dx*=-1
+if(p.y<0||p.y>canvas.height)p.dy*=-1
+
+ctx.beginPath()
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+ctx.fillStyle="rgba(255,255,255,0.8)"
+ctx.fill()
+
+})
+
+requestAnimationFrame(animate)
+
+}
+
+animate()
+
+</script>
+
+</body>
+</html>
